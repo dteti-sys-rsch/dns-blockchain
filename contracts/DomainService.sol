@@ -1,38 +1,84 @@
 // SPDX-License-Identifier: UNLICENSED
 
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.24;
 
 contract DomainService {
-  struct DomainStruct {
-    address owner;
-    string domainName;
-    string A;
-    string CNAME;
-    string NS;
-    string MX;
-    // string TXT;
-    // string SOA;
-    bool exists;
-  }
+    struct DomainStruct {
+        address owner;
+        string domainName;
+        string ARecord;
+        bool exist;
+    }
 
-  event DomainCreated(address owner, string domainName, string A, string CNAME, string NS, string MX);
+    event DomainCreated(
+        address owner, 
+        string domainName, 
+        string ARecord,
+        bool exist
+    );
 
-  mapping (string => DomainStruct) public domains;
+    event DomainUpdated(
+        string ARecord
+    );
 
-  DomainStruct[] public domain;
+    mapping(string => DomainStruct) public domains;
 
-  function createDomain (address owner, string memory _domainName, string memory _A, string memory _CNAME, string memory _NS, string memory _MX) public {
-    require(domains[_domainName].exists == false, "Domain already exists");
+    modifier notExist (string memory domainName) {
+      require(domains[domainName].exist == false, "Domain sudah ada");
+      _;
+    }
 
-    domain.push(DomainStruct(owner, _domainName, _A, _CNAME, _NS, _MX, true));
+    modifier isExist (string memory domainName) {
+      require(domains[domainName].exist == true, "Domain tidak ada");
+      _;
+    }
 
-    emit DomainCreated(owner, _domainName, _A, _CNAME, _NS, _MX);
-  }
+    modifier onlyOwner (string memory domainName, address owner) {
+      require(domains[domainName].owner == owner, "Domain not owned by sender");
+      _;
+    }
 
-  function dnsLookup (string memory _domainName) public view returns (DomainStruct[] memory) {
-    require(domains[_domainName].exists == true, "Domain does not exist");
+    function createDomain(
+        address owner, 
+        string memory domainName, 
+        string memory ARecord
+    ) 
+        public 
+        notExist(domainName) 
+        returns (bool) 
+    {
+        DomainStruct memory new_domain = DomainStruct(owner, domainName, ARecord, true);
+        domains[domainName] = new_domain;
 
-    return domain;
-  }
+        emit DomainCreated(owner, domainName, ARecord, true);
+        return true;
+    }
 
+    function domainLookup(
+        string memory domainName
+    ) 
+        public 
+        view 
+        isExist(domainName) 
+        returns (string memory) 
+    {
+        return domains[domainName].ARecord;
+    }
+
+    function updateDomain(
+        address owner, 
+        string memory domainName, 
+        string memory ARecord
+    ) 
+        public 
+        onlyOwner(domainName, owner) 
+        isExist(domainName) 
+        returns (bool) 
+    {
+        DomainStruct memory new_domain = DomainStruct(owner, domainName, ARecord, true);
+        domains[domainName] = new_domain;
+
+        emit DomainUpdated(ARecord);
+        return true;
+    }
 }
