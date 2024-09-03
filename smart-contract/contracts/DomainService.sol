@@ -21,6 +21,10 @@ contract DomainService {
         string ARecord
     );
 
+    event DomainDeleted(
+        string domainName
+    );
+
     mapping(string => DomainStruct) public domains;
 
     modifier notExist (string memory domainName) {
@@ -79,6 +83,21 @@ contract DomainService {
         domains[domainName] = new_domain;
 
         emit DomainUpdated(ARecord);
+        return true;
+    }
+
+    function deleteDomain(
+        address owner, 
+        string memory domainName
+    ) 
+        public 
+        onlyOwner(domainName, owner) 
+        isExist(domainName) 
+        returns (bool) 
+    {
+        delete domains[domainName];
+        
+        emit DomainDeleted(domainName);
         return true;
     }
 }

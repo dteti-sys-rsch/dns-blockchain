@@ -1,8 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./Providers";
-// import { NextUIProvider } from "@nextui-org/react";
-// import { DNSProvider } from "@/utils/DNSProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
