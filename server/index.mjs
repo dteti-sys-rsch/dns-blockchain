@@ -3,10 +3,13 @@ import dotenv from "dotenv";
 import dnsPacket from "dns-packet";
 import { ethers } from "ethers";
 import { readFile } from "fs/promises";
+import dns from "dns";
 
 dotenv.config();
 
-const abi = JSON.parse(await readFile(new URL("./DomainService.json", import.meta.url)));
+const abi = JSON.parse(
+  await readFile(new URL("./DomainService.json", import.meta.url))
+);
 
 const server = dgram.createSocket("udp4");
 
@@ -14,33 +17,63 @@ const server = dgram.createSocket("udp4");
 const PORT = 53;
 
 // Koneksi ke jaringan Sepolia melalui Infura
-const provider = new ethers.WebSocketProvider(`wss://sepolia.infura.io/ws/v3/${process.env.INFURA_API_KEY}`);
-const contract = new ethers.Contract(process.env.NEXT_PUBLIC_CONTRACT_ADDRESS, abi, provider);
+const provider = new ethers.WebSocketProvider(
+  `wss://sepolia.infura.io/ws/v3/${process.env.INFURA_API_KEY}`
+);
+const contract = new ethers.Contract(
+  process.env.CONTRACT_ADDRESS,
+  abi,
+  provider
+);
 
-const cache = {};
+let cache = {};
 
-// Fungsi untuk query ke smart contract
-async function queryBlockchain(domain) {
+// Fungsi untuk query ke smart contract di blockchain
+async function queryBlockchainDNS(domain) {
   if (cache[domain]) {
     return cache[domain];
   }
   try {
-    const ip = await contract.domainLookup(domain);
-    cache[domain] = ip;
-    return ip;
+    let address = await contract.domainLookup(domain);
+    cache[domain] = address;
+    return address;
   } catch (error) {
-    console.error("Error querying blockchain: ", error);
+    console.error("Tidak ada alamat IP yang ditemukan di blockchain");
     return null;
   }
 }
 
-// Ketika server menerima pesan
+// Fungsi untuk query ke DNS server eksternal (konvensional) secara recursive
+function queryExternalDNS(domain) {
+  return new Promise((resolve, reject) => {
+    // Menggunakan dns.resolve untuk melakukan query DNS recursive
+    dns.resolve4(domain, (err, addresses) => {
+      if (err) {
+        console.error(`Error resolving ${domain} with external DNS:`, err);
+        return reject(err);
+      }
+      console.log(`External DNS resolved ${domain} to IP: ${addresses[0]}`);
+      resolve(addresses[0]); // Mengambil IP pertama dari hasil query
+    });
+  });
+}
+
 server.on("message", async (msg, rinfo) => {
   const incomingReq = dnsPacket.decode(msg);
   const domain = incomingReq.questions[0].name;
 
   // Mengambil data dari smart contract di Sepolia
-  const ip = await queryBlockchain(domain);
+  let address = await queryBlockchainDNS(domain);
+
+  // Jika IP tidak ditemukan di blockchain, query ke DNS eksternal secara recursive
+  if (!address) {
+    try {
+      address = await queryExternalDNS(domain);
+    } catch (err) {
+      console.error(`DNS lookup failed for ${domain}:`, err);
+      return;
+    }
+  }
 
   const ans = dnsPacket.encode({
     type: "response",
@@ -52,12 +85,12 @@ server.on("message", async (msg, rinfo) => {
         type: "A",
         class: "IN",
         name: domain,
-        data: ip,
+        data: address,
       },
     ],
   });
 
-  console.log(`IP: ${ip}`);
+  console.log(`Resolved IP for ${domain}: ${address}`);
 
   // Kirim respons kembali ke client
   server.send(ans, rinfo.port, rinfo.address, (err) => {
