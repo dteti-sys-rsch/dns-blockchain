@@ -35,6 +35,12 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
         "internalType": "string",
         "name": "domainName",
         "type": "string"
@@ -48,9 +54,27 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "domainName",
+        "type": "string"
+      },
+      {
+        "indexed": false,
         "internalType": "string",
         "name": "ARecord",
         "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "exist",
+        "type": "bool"
       }
     ],
     "name": "DomainUpdated",
@@ -112,6 +136,25 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "domainList",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "string",
         "name": "domainName",
         "type": "string"
@@ -157,6 +200,41 @@
         "internalType": "bool",
         "name": "exist",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAllDomains",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "domainName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "ARecord",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "exist",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct DomainService.DomainStruct[]",
+        "name": "",
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",

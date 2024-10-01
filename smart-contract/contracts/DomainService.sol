@@ -30,7 +30,7 @@ contract DomainService {
     );
 
     mapping(string => DomainStruct) public domains;
-    string[] public domainList; // Menyimpan daftar nama domain
+    string[] public domainList;
 
     modifier notExist(string memory domainName) {
         require(keccak256(abi.encodePacked(domains[domainName].domainName)) != keccak256(abi.encodePacked(domainName)), 
@@ -49,7 +49,6 @@ contract DomainService {
         _;
     }
 
-    // Fungsi untuk membuat domain baru
     function createDomain(
         address owner, 
         string memory domainName, 
@@ -61,13 +60,12 @@ contract DomainService {
     {
         DomainStruct memory new_domain = DomainStruct(owner, domainName, ARecord, true);
         domains[domainName] = new_domain;
-        domainList.push(domainName); // Menambahkan domain ke daftar
+        domainList.push(domainName);
 
         emit DomainCreated(owner, domainName, ARecord, true);
         return true;
     }
 
-    // Fungsi untuk melihat ARecord dari domain yang sudah ada
     function domainLookup(
         string memory domainName
     ) 
@@ -79,7 +77,6 @@ contract DomainService {
         return domains[domainName].ARecord;
     }
 
-    // Fungsi untuk memperbarui informasi domain
     function updateDomain(
         address owner, 
         string memory domainName, 
@@ -97,7 +94,6 @@ contract DomainService {
         return true;
     }
 
-    // Fungsi untuk menghapus domain
     function deleteDomain(
         address owner, 
         string memory domainName
@@ -109,12 +105,10 @@ contract DomainService {
     {
         delete domains[domainName];
 
-        // Hapus domain dari domainList
         for (uint i = 0; i < domainList.length; i++) {
             if (keccak256(abi.encodePacked(domainList[i])) == keccak256(abi.encodePacked(domainName))) {
-                // Menghapus elemen dari array domainList dengan menggeser elemen
-                domainList[i] = domainList[domainList.length - 1]; // Ganti elemen dengan elemen terakhir
-                domainList.pop(); // Hapus elemen terakhir
+                domainList[i] = domainList[domainList.length - 1];
+                domainList.pop();
                 break;
             }
         }
@@ -123,7 +117,6 @@ contract DomainService {
         return true;
     }
 
-    // Fungsi untuk mendapatkan semua domain yang ada
     function getAllDomains() 
         public 
         view 
