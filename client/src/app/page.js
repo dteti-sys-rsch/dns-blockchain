@@ -2,7 +2,7 @@
 import { useContext, useState } from "react";
 import { DNSContext } from "@/utils/DNSProvider";
 import Navbar from "@/components/Navbar";
-import About from "@/components/About";
+import About from "@/components/Home";
 import Dashboard from "@/components/Dashboard";
 
 export default function Home() {

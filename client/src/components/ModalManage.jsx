@@ -15,7 +15,7 @@ export default function ModalUpdate({
       <div className="justify-center items-center flex fixed inset-0 z-10 text-base">
         <div className="w-1/2 mx-auto bg-white p-6 font-roboto rounded-lg shadow-lg relative flex flex-col gap-4">
           <div className="flex items-center font-semibold text-lg">
-            Ubah Domain
+            Kelola Domain
             <button
               className="p-1 rounded hover:bg-red hover:text-white ml-auto ease transition-all duration-300"
               onClick={onClose}
@@ -50,7 +50,7 @@ export default function ModalUpdate({
                 className="text-red hover:bg-red hover:text-white rounded-md py-2 px-4 ease transition-all duration-300"
                 onClick={() => {
                   handleDelete(row.domainName);
-                  onClose;
+                  onClose();
                 }}
               >
                 Hapus
@@ -66,7 +66,7 @@ export default function ModalUpdate({
                   className="py-2 px-4 rounded-md text-white ease transition-all duration-300 hover:bg-secondary bg-accent"
                   onClick={() => {
                     handleUpdate(row.domainName);
-                    onClose;
+                    onClose();
                   }}
                 >
                   Ubah

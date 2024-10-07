@@ -45,7 +45,10 @@ export default function ModalCreate({ onClose, visible, handleInput, handleCreat
               </button>
               <button
                 className="py-2 px-4 rounded-md text-white ease transition-all duration-300 hover:bg-secondary bg-accent"
-                onClick={() => {handleCreate; onClose}}
+                onClick={() => {
+                  handleCreate();
+                  onClose();
+                }}
               >
                 Tambah
               </button>

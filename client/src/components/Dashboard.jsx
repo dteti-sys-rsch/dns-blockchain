@@ -1,6 +1,6 @@
 import { useState } from "react";
 import ModalCreate from "./ModalCreate";
-import ModalUpdate from "./ModalUpdate";
+import ModalUpdate from "./ModalManage";
 
 export default function Dashboard({
   domains,
@@ -34,7 +34,6 @@ export default function Dashboard({
         <div className="flex flex-row justify-between w-full text-start font-bold border-b pb-3">
           <h2 className="w-1/3">Nama Domain</h2>
           <h2 className="w-1/3">Alamat IP</h2>
-          {/* <h2 className="w-1/3">Status</h2> */}
           <h2 className="w-20"></h2>
         </div>
         {domains.length > 0 ? (
@@ -45,7 +44,6 @@ export default function Dashboard({
             >
               <h2 className="w-1/3">{domain.domainName}</h2>
               <h2 className="w-1/3">{domain.ARecord}</h2>
-              {/* <h2 className="w-1/3">{String(domain.exist)}</h2> */}
               <button
                 className="w-20 bg-accent hover:bg-secondary text-white px-4 py-2 rounded-lg ease transition-all duration-300"
                 onClick={() => {

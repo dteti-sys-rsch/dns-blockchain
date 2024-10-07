@@ -7,7 +7,7 @@ export default function Navbar({
   account,
 }) {
   return (
-    <div className="z-10 absolute w-full mx-auto h-16 border-primary border-b font-inter">
+    <div className="absolute w-full mx-auto h-16 border-primary border-b font-inter">
       <div className="flex flex-row justify-between items-center text-primary h-full px-20">
         <p className="font-bold">DeNS</p>
         {account ? (
@@ -17,7 +17,7 @@ export default function Navbar({
               className="p-2 bg-accent hover:bg-secondary text-white rounded-md ease transition-all duration-300"
               onClick={handleFetch}
             >
-              <FaArrowsRotate className={loading ? "animate-spin" : ""} />
+              <FaArrowsRotate/>
             </button>
           </div>
         ) : (
