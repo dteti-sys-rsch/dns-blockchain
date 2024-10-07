@@ -34,18 +34,19 @@ contract DomainService {
 
     modifier notExist(string memory domainName) {
         require(keccak256(abi.encodePacked(domains[domainName].domainName)) != keccak256(abi.encodePacked(domainName)), 
-                "Domain sudah ada");
+            "Domain sudah ada");
         _;
     }
 
     modifier isExist(string memory domainName) {
         require(keccak256(abi.encodePacked(domains[domainName].domainName)) == keccak256(abi.encodePacked(domainName)), 
-                "Domain tidak ada");
+            "Domain tidak ada");
         _;
     }
 
-    modifier onlyOwner(string memory domainName, address owner) {
-        require(domains[domainName].owner == owner, "Domain not owned by sender");
+    modifier onlyOwner(string memory domainName) {
+        require(domains[domainName].owner == msg.sender, 
+            "Domain not owned by sender");
         _;
     }
 
@@ -83,7 +84,7 @@ contract DomainService {
         string memory ARecord
     ) 
         public 
-        onlyOwner(domainName, owner) 
+        onlyOwner(domainName) 
         isExist(domainName) 
         returns (bool) 
     {
@@ -99,7 +100,7 @@ contract DomainService {
         string memory domainName
     ) 
         public 
-        onlyOwner(domainName, owner) 
+        onlyOwner(domainName) 
         isExist(domainName) 
         returns (bool) 
     {
@@ -129,6 +130,34 @@ contract DomainService {
         }
 
         return allDomains;
+    }
+
+    function getAllDomainsByOwner(
+        address owner
+    ) 
+        public 
+        view 
+        returns (DomainStruct[] memory) 
+    {
+        uint ownerDomainCount = 0;
+
+        for (uint i = 0; i < domainList.length; i++) {
+            if (domains[domainList[i]].owner == owner) {
+                ownerDomainCount++;
+            }
+        }
+
+        DomainStruct[] memory ownerDomains = new DomainStruct[](ownerDomainCount);
+        uint currentIndex = 0;
+
+        for (uint i = 0; i < domainList.length; i++) {
+            if (domains[domainList[i]].owner == owner) {
+                ownerDomains[currentIndex] = domains[domainList[i]];
+                currentIndex++;
+            }
+        }
+
+        return ownerDomains;
     }
 
 }
