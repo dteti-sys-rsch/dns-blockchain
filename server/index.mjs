@@ -42,6 +42,7 @@ function getCachedDomain(domain) {
 
 async function queryBlockchainDNS(domain) {
   const cachedAddress = getCachedDomain(domain);
+  
   if (cachedAddress) {
     return cachedAddress;
   }
@@ -49,7 +50,7 @@ async function queryBlockchainDNS(domain) {
   try {
     let address = await contract.domainLookup(domain);
     if (address) {
-      cacheDomain(domain, address, CACHE_TTL);
+      // cacheDomain(domain, address, CACHE_TTL);
       return address;
     }
   } catch (error) {
@@ -77,7 +78,7 @@ server.on("message", async (msg, rinfo) => {
     const incomingReq = dnsPacket.decode(msg);
     const domain = incomingReq.questions[0].name;
 
-    console.log(`Query for domain: ${domain}`);
+    console.log(`Kueri untuk domain: ${domain}`);
 
     let address = getCachedDomain(domain);
 
@@ -90,7 +91,7 @@ server.on("message", async (msg, rinfo) => {
       address = blockchainAddress || externalAddress;
 
       if (!address) {
-        console.error(`DNS lookup failed for ${domain}`);
+        console.error(`Domain ${domain} tidak ditemukan`);
         return;
       }
 
