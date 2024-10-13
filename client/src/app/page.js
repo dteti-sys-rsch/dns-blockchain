@@ -20,8 +20,7 @@ export default function Home() {
   const [account, setAccount] = useState(null);
   const [dnsContract, setDnsContract] = useState(null);
   const [domains, setDomains] = useState([]);
-  const [namaDomain, setNamaDomain] = useState("");
-  const [alamatIP, setAlamatIP] = useState("");
+  const [address, setAddress] = useState("");
 
   const connect = async () => {
     try {
@@ -49,7 +48,7 @@ export default function Home() {
     try {
       console.log(domainName);
       const { alamatIP } = await domainLookup(dnsContract, domainName);
-      setAlamatIP(alamatIP);
+      setAddress(alamatIP);
     } catch (e) {
       console.error(e);
     }
@@ -84,42 +83,16 @@ export default function Home() {
         {account ? (
           <Dashboard
             domains={domains}
+            address={address}
             handleInput={handleInput}
             handleCreate={handleCreate}
             handleUpdate={(domainName) => handleUpdate(domainName)}
-            handleLookup={handleLookup}
+            handleLookup={(domainName) => handleLookup(domainName)}
             handleDelete={(domainName) => handleDelete(domainName)}
           />
         ) : (
           <About loading={isLoading} connectWallet={connect} />
         )}
-        {/* 
-        <input
-          type="text"
-          placeholder="Nama domain"
-          onChange={(e) => {
-            setNamaDomain(e.currentTarget.value);
-          }}
-          className="my-2 w-full rounded-sm p-2 bg-transparent text-black text-sm border"
-        />
-        <button onClick={() => handleLookup(namaDomain)}>
-          dns lookup
-        </button>
-        <p>
-          alamat IP web {namaDomain}: {alamatIP}
-        </p>
-
-        <input
-          type="text"
-          placeholder="Nama domain"
-          onChange={(e) => {
-            setNamaDomain(e.currentTarget.value);
-          }}
-          className="my-2 w-full rounded-sm p-2 bg-transparent text-black text-sm border"
-        />
-        <button onClick={() => handleDelete(namaDomain)}>
-          delete domain
-        </button> */}
       </div>
     </>
   );
