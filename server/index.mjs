@@ -42,7 +42,7 @@ function getCachedDomain(domain) {
 
 async function queryBlockchainDNS(domain) {
   const cachedAddress = getCachedDomain(domain);
-  
+
   if (cachedAddress) {
     return cachedAddress;
   }
@@ -50,7 +50,6 @@ async function queryBlockchainDNS(domain) {
   try {
     let address = await contract.domainLookup(domain);
     if (address) {
-      // cacheDomain(domain, address, CACHE_TTL);
       return address;
     }
   } catch (error) {

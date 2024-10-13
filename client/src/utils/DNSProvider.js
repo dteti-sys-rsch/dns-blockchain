@@ -48,7 +48,7 @@ export const DNSProvider = ({ children }) => {
       );
       setCurrentAccount(account);
 
-      const allDomains = await dnsContract.getAllDomains();
+      const allDomains = await dnsContract.getAllDomainsByOwner(account);
       const domains = allDomains.map((domain) => ({
         owner: domain.owner,
         domainName: domain.domainName,
@@ -71,7 +71,7 @@ export const DNSProvider = ({ children }) => {
   const fetchDomains = async (dnsContract) => {
     try {
       setIsLoading(true);
-      const allDomains = await dnsContract.getAllDomains();
+      const allDomains = await dnsContract.getAllDomainsByOwner(currentAccount);
       const domains = allDomains.map((domain) => ({
         owner: domain.owner,
         domainName: domain.domainName,

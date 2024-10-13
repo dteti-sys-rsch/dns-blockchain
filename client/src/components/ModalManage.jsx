@@ -13,7 +13,7 @@ export default function ModalUpdate({
   return (
     <>
       <div className="justify-center items-center flex fixed inset-0 z-10 text-base">
-        <div className="w-1/2 mx-auto bg-white p-6 font-roboto rounded-lg shadow-lg relative flex flex-col gap-4">
+        <div className="w-1/3 mx-auto bg-white p-6 font-roboto rounded-lg shadow-lg relative flex flex-col gap-4">
           <div className="flex items-center font-semibold text-lg">
             Kelola Domain
             <button
@@ -31,7 +31,7 @@ export default function ModalUpdate({
                   type="text"
                   defaultValue={row.domainName}
                   onChange={(e) => handleInput(e, "domainName")}
-                  className="my-2 w-full rounded-sm p-2 bg-transparent text-black text-sm border"
+                  className="my-2 w-full rounded-lg p-2 bg-transparent text-black text-sm border"
                   disabled
                 />
               </div>
@@ -41,7 +41,7 @@ export default function ModalUpdate({
                   type="text"
                   defaultValue={row.ARecord}
                   onChange={(e) => handleInput(e, "ARecord")}
-                  className="my-2 w-full rounded-sm p-2 bg-transparent text-black text-sm border"
+                  className="my-2 w-full rounded-lg p-2 bg-transparent text-black text-sm border"
                 />
               </div>
             </div>

@@ -206,8 +206,14 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "getAllDomains",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      }
+    ],
+    "name": "getAllDomainsByOwner",
     "outputs": [
       {
         "components": [

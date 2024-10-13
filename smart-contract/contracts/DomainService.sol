@@ -118,20 +118,6 @@ contract DomainService {
         return true;
     }
 
-    function getAllDomains() 
-        public 
-        view 
-        returns (DomainStruct[] memory) 
-    {
-        DomainStruct[] memory allDomains = new DomainStruct[](domainList.length);
-
-        for (uint i = 0; i < domainList.length; i++) {
-            allDomains[i] = domains[domainList[i]];
-        }
-
-        return allDomains;
-    }
-
     function getAllDomainsByOwner(
         address owner
     ) 

@@ -1,11 +1,16 @@
 import { FaXmark } from "react-icons/fa6";
 
-export default function ModalCreate({ onClose, visible, handleInput, handleCreate }) {
+export default function ModalCreate({
+  onClose,
+  visible,
+  handleInput,
+  handleCreate,
+}) {
   if (!visible) return null;
   return (
     <>
       <div className="justify-center items-center flex fixed inset-0 z-10 text-base">
-        <div className="w-1/2 mx-auto bg-white p-6 font-roboto rounded-lg shadow-lg relative flex flex-col gap-4">
+        <div className="w-1/3 mx-auto bg-white p-6 font-roboto rounded-lg shadow-lg relative flex flex-col gap-4">
           <div className="flex items-start font-semibold text-lg">
             Tambah Domain
             <button
@@ -23,7 +28,7 @@ export default function ModalCreate({ onClose, visible, handleInput, handleCreat
                   type="text"
                   placeholder="Masukkan nama domain"
                   onChange={(e) => handleInput(e, "domainName")}
-                  className="my-2 w-full rounded-sm p-2 bg-transparent text-black text-sm border"
+                  className="my-2 w-full rounded-lg p-2 bg-transparent text-black text-sm border"
                 />
               </div>
               <div className="flex flex-col w-full gap-1">
@@ -32,7 +37,7 @@ export default function ModalCreate({ onClose, visible, handleInput, handleCreat
                   type="text"
                   placeholder="Masukkan alamat IP"
                   onChange={(e) => handleInput(e, "ARecord")}
-                  className="my-2 w-full rounded-sm p-2 bg-transparent text-black text-sm border"
+                  className="my-2 w-full rounded-lg p-2 bg-transparent text-black text-sm border"
                 />
               </div>
             </div>
